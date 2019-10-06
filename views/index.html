@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="githubsearch">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Github Repo Search</title>
+
+  <link rel="stylesheet" href="custombootstrap.css" media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="fontawesome/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="octicons/octicons/octicons.css" media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="site.css" media="screen" title="no title" charset="utf-8">
+
+</head>
+<body ng-controller="GithubUserController">
+
+  <div class="container">
+
+    <h1 class="text-center">
+        <div class="panel-heading">
+            <p>Search for a Github Account by Username</p>
+            <form class="form-inline">
+                <span>
+                      <input ng-model="searchUser" placeholder="Find a user..." class="form-control input-sm"
+                          ng-keydown="$event.which === 13 && passUser()">
+                      <input type="button" class="btn btn-default ng-binding" ng-click="passUser()" value="Find" ng-disabled="searchUser == null" />
+                      </h4>
+                  </span>
+              </form>
+
+          </div>
+      </h1>
+
+
+      <h1 class="text-center" ng-if="userLoaded">
+          <!-- hide repo data if nothing retrieved  -->
+          <span ng-hide="repoData"/></span>
+          <span />{{userData.name}}</span>
+          <br>
+          <a href="{{userData.html_url}}" class="btn btn-default">
+              <span class="octicon octicon-octoface"></span>
+              {{userData.login}}
+          </a>
+
+      </h1>
+
+      <div class="panel  panel-default" ng-if="reposLoaded">
+          <div class="panel-heading">
+
+              <form class="form-inline">
+                  <span>
+                      <h4> Repos <span class="badge">{{repoData.length}}</span>
+                      <input ng-model="searchText" placeholder="Find a repo..." class="form-control input-sm">
+                      </h4>
+                  </span>
+              </form>
+
+          </div>
+          <div class="panel-body">
+              <div class="list-group">
+                  <div ng-repeat="repo in repoData | filter:searchText  | orderBy:predicate:reverse" class="list-group-item ">
+                      <div class="row">
+                          <div class="col-md-8">
+                              <h4>
+                                  <small>
+                                      <!-- add fork icon is repo forked  -->
+                                      <span ng-if="repo.fork" class="octicon octicon-repo-forked"></span>
+                                      <span ng-if="!repo.fork" class="octicon octicon-repo"></span>
+                                  </small>
+                                  <a href="{{repo.html_url}}" target="_blank" >
+                                      {{repo.name}}
+                                  </a>
+                                  <small>{{repo.description}}</small>
+                              </h4>
+
+                                <span ng-if="repo.homepage">
+                                  <small>
+                                    <a href="{{repo.homepage}}" class="">
+                                        <i class="fa fa-link"></i> WebPage
+                                    </a>
+                                  </small>
+                                </span>
+                          </div>
+                          <div class="col-md-4">
+                              <dl class="dl-horizontal">
+                                <dt>Last Updated:</dt>
+                                <dd>{{repo.updated_at | date : short : timezone}}</dd>
+                                <dt>Created:</dt>
+                                <dd>{{repo.created_at| date : short : timezone}}</dd>
+                              </dl>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+
+  </div>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
+<script src="controllers.js"></script>
+<script src="githubService.js"></script>
+
+</html>

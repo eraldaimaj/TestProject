@@ -3,7 +3,7 @@
 
 To run application:
 
-1 - Make sure express is installed,otherwise"npm install express"
+1 -"npm install express"
 
 2 - Run "node server.js"
 
